@@ -25,18 +25,18 @@ model Poll {
     title     String @db.VarChar(255)
     creatorId String
 
-    options PoolOption[]
+    options PollOption[]
 
     voteLimit   Int     @default(3)
     showVotes   Boolean @default(false)
     showOptions Boolean @default(false)
 
-    User User @relation(fields: [creatorId], references: [id])
+    user User @relation(fields: [creatorId], references: [id])
 
     @@index([creatorId])
 }
 
-model PoolOption {
+model PollOption {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
 
@@ -46,7 +46,7 @@ model PoolOption {
     pollId    String
     voteCount Int    @default(0)
 
-    Poll Poll @relation(fields: [pollId], references: [id])
+    poll Poll @relation(fields: [pollId], references: [id])
 
     @@index([pollId, creatorId])
 }
