@@ -11,8 +11,42 @@ datasource db {
     relationMode = "prisma"
 }
 
-model Example {
+model User {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+
+    pollsCreated Poll[]
+}
+
+model Poll {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+
+    title     String @db.VarChar(255)
+    creatorId String
+
+    options PoolOption[]
+
+    voteLimit   Int     @default(3)
+    showVotes   Boolean @default(false)
+    showOptions Boolean @default(false)
+
+    User User @relation(fields: [creatorId], references: [id])
+
+    @@index([creatorId])
+}
+
+model PoolOption {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+
+    creatorId String
+    content   String @db.VarChar(255)
+
+    pollId    String
+    voteCount Int    @default(0)
+
+    Poll Poll @relation(fields: [pollId], references: [id])
+
+    @@index([pollId, creatorId])
 }
