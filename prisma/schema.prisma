@@ -11,13 +11,6 @@ datasource db {
     relationMode = "prisma"
 }
 
-model User {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-
-    pollsCreated Poll[]
-}
-
 model Poll {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
@@ -30,8 +23,6 @@ model Poll {
     voteLimit   Int     @default(3)
     showVotes   Boolean @default(false)
     showOptions Boolean @default(false)
-
-    user User @relation(fields: [creatorId], references: [id])
 
     @@index([creatorId])
 }
