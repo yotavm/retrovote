@@ -29,6 +29,6 @@ export const pollRouter = createTRPCRouter({
           creatorId: ctx.currentUser,
         },
       });
-      return poll.id;
+      return { pollId: poll.id };
     }),
 });
