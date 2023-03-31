@@ -1,6 +1,8 @@
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import Head from "next/head";
+import { useState } from "react";
+import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
   const { isLoaded, isSignedIn } = useUser();
@@ -26,14 +28,34 @@ const Home: NextPage = () => {
 };
 
 const PollCreation = () => {
+  const [pollTitle, setPollTitle] = useState("");
+  const { mutate, isLoading } = api.poll.create.useMutation({
+    onSuccess: (data) => {
+      console.log(data);
+      setPollTitle("");
+    },
+  });
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <div className="flex w-full gap-4">
       <input
         className="flex-1 rounded-md border-2 bg-transparent px-2 py-2 text-white outline-none"
         type="text"
         placeholder="Poll Title"
+        value={pollTitle}
+        onChange={(e) => setPollTitle(e.target.value)}
       />
-      <button>Create</button>
+      <button
+        onClick={() => {
+          mutate({ title: pollTitle });
+        }}
+      >
+        Create
+      </button>
     </div>
   );
 };
