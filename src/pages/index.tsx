@@ -1,6 +1,7 @@
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { api } from "~/utils/api";
 
@@ -28,11 +29,13 @@ const Home: NextPage = () => {
 };
 
 const PollCreation = () => {
+  const router = useRouter();
   const [pollTitle, setPollTitle] = useState("");
+
   const { mutate, isLoading } = api.poll.create.useMutation({
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: async ({ pollId }) => {
       setPollTitle("");
+      await router.push(`/${pollId}`);
     },
   });
 
