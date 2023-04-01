@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import {
   authProcedure,
@@ -6,14 +7,21 @@ import {
 } from "~/server/api/trpc";
 
 export const pollRouter = createTRPCRouter({
-  getById: publicProcedure.query(async ({ ctx, input }) => {
-    const poll = await ctx.prisma.poll.findUnique({
-      where: {
-        id: input,
-      },
-    });
-    return poll;
-  }),
+  getById: publicProcedure
+    .input(z.object({ pollId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const poll = await ctx.prisma.poll.findUnique({
+        where: {
+          id: input.pollId,
+        },
+      });
+
+      if (!poll) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      return poll;
+    }),
 
   create: authProcedure
     .input(
