@@ -30,12 +30,12 @@ const Home: NextPage = () => {
 
 const BoardCreation = () => {
   const router = useRouter();
-  const [boardTitle, setboardTitle] = useState("");
+  const [boardName, setboardName] = useState("");
 
   const { mutate, isLoading } = api.board.create.useMutation({
     onSuccess: async ({ boardId }) => {
-      setboardTitle("");
-      await router.push(`/${boardId}`);
+      setboardName("");
+      await router.push(`board/${boardId}`);
     },
   });
 
@@ -48,13 +48,13 @@ const BoardCreation = () => {
       <input
         className="flex-1 rounded-md border-2 bg-transparent px-2 py-2 text-white outline-none"
         type="text"
-        placeholder="board Title"
-        value={boardTitle}
-        onChange={(e) => setboardTitle(e.target.value)}
+        placeholder="board Name"
+        value={boardName}
+        onChange={(e) => setboardName(e.target.value)}
       />
       <button
         onClick={() => {
-          mutate({ title: boardTitle });
+          mutate({ name: boardName });
         }}
       >
         Create

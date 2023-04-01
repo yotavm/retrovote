@@ -15,10 +15,10 @@ model board {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
 
-    title     String @db.VarChar(255)
+    name      String @db.VarChar(255)
     creatorId String
 
-    options boardOption[]
+    ideas idea[]
 
     voteLimit   Int     @default(3)
     showVotes   Boolean @default(false)
@@ -27,7 +27,7 @@ model board {
     @@index([creatorId])
 }
 
-model boardOption {
+model idea {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
 

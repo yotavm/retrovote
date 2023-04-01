@@ -26,14 +26,14 @@ export const boardRouter = createTRPCRouter({
   create: authProcedure
     .input(
       z.object({
-        title: z.string(),
+        name: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { title } = input;
+      const { name } = input;
       const board = await ctx.prisma.board.create({
         data: {
-          title,
+          name,
           creatorId: ctx.currentUser,
         },
       });
