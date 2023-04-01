@@ -21,21 +21,21 @@ const Home: NextPage = () => {
           </h1>
           {!isLoaded && <p>Loading...</p>}
           {!isSignedIn && <SignInButton />}
-          {isSignedIn && <PollCreation />}
+          {isSignedIn && <BoardCreation />}
         </div>
       </main>
     </>
   );
 };
 
-const PollCreation = () => {
+const BoardCreation = () => {
   const router = useRouter();
-  const [pollTitle, setPollTitle] = useState("");
+  const [boardTitle, setboardTitle] = useState("");
 
-  const { mutate, isLoading } = api.poll.create.useMutation({
-    onSuccess: async ({ pollId }) => {
-      setPollTitle("");
-      await router.push(`/${pollId}`);
+  const { mutate, isLoading } = api.board.create.useMutation({
+    onSuccess: async ({ boardId }) => {
+      setboardTitle("");
+      await router.push(`/${boardId}`);
     },
   });
 
@@ -48,13 +48,13 @@ const PollCreation = () => {
       <input
         className="flex-1 rounded-md border-2 bg-transparent px-2 py-2 text-white outline-none"
         type="text"
-        placeholder="Poll Title"
-        value={pollTitle}
-        onChange={(e) => setPollTitle(e.target.value)}
+        placeholder="board Title"
+        value={boardTitle}
+        onChange={(e) => setboardTitle(e.target.value)}
       />
       <button
         onClick={() => {
-          mutate({ title: pollTitle });
+          mutate({ title: boardTitle });
         }}
       >
         Create

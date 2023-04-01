@@ -11,14 +11,14 @@ datasource db {
     relationMode = "prisma"
 }
 
-model Poll {
+model board {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
 
     title     String @db.VarChar(255)
     creatorId String
 
-    options PollOption[]
+    options boardOption[]
 
     voteLimit   Int     @default(3)
     showVotes   Boolean @default(false)
@@ -27,17 +27,17 @@ model Poll {
     @@index([creatorId])
 }
 
-model PollOption {
+model boardOption {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
 
     creatorId String
     content   String @db.VarChar(255)
 
-    pollId    String
+    boardId   String
     voteCount Int    @default(0)
 
-    poll Poll @relation(fields: [pollId], references: [id])
+    board board @relation(fields: [boardId], references: [id])
 
-    @@index([pollId, creatorId])
+    @@index([boardId, creatorId])
 }

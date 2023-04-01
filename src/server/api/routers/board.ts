@@ -6,21 +6,21 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 
-export const pollRouter = createTRPCRouter({
+export const boardRouter = createTRPCRouter({
   getById: publicProcedure
-    .input(z.object({ pollId: z.string() }))
+    .input(z.object({ boardId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const poll = await ctx.prisma.poll.findUnique({
+      const board = await ctx.prisma.board.findUnique({
         where: {
-          id: input.pollId,
+          id: input.boardId,
         },
       });
 
-      if (!poll) {
+      if (!board) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }
 
-      return poll;
+      return board;
     }),
 
   create: authProcedure
@@ -31,12 +31,12 @@ export const pollRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { title } = input;
-      const poll = await ctx.prisma.poll.create({
+      const board = await ctx.prisma.board.create({
         data: {
           title,
           creatorId: ctx.currentUser,
         },
       });
-      return { pollId: poll.id };
+      return { boardId: board.id };
     }),
 });
