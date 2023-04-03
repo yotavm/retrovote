@@ -63,7 +63,7 @@ const Board: NextPage = () => {
             <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
               {board && <div>{board.name}</div>}
             </h3>
-            <p className="mt-2 leading-6">
+            <p className="mt-2 w-1/2 break-normal leading-6">
               Once upon a time, in a far-off land, there was a very lazy king
               who spent all day lounging on his throne. One day, his advisors
               came to him with a problem: the kingdom was running out of money.
