@@ -1,5 +1,6 @@
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { api } from "~/utils/api";
 
 type RouterboardQuery = {
@@ -22,6 +23,7 @@ const Board: NextPage = () => {
   const router = useRouter();
   const { boardId } = router.query as RouterboardQuery;
   const { data: board, isLoading } = api.board.getById.useQuery({ boardId });
+  const [idea, setIdea] = useState("");
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -73,7 +75,35 @@ const Board: NextPage = () => {
           <div className="scroll-m-20 text-4xl font-semibold tracking-tight lg:text-4xl">
             Add Ideas. Then Vote
           </div>
-          <input className="my-16" type="text" />
+          <div className="relative my-16 flex w-full items-center">
+            <input
+              className="h-[48px] w-full rounded-sm border-b-2 border-slate-500 bg-slate-800 p-2  pr-16 outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+              type="text"
+              placeholder="Type your idea here..."
+              value={idea}
+              onChange={(e) => setIdea(e.target.value)}
+              onKeyUp={(e) => {
+                if (e.key === "Enter") {
+                  console.log(idea);
+                }
+              }}
+            />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="absolute right-0 mx-2 h-6 w-6 cursor-pointer"
+              onClick={() => console.log(idea)}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+              />
+            </svg>
+          </div>
         </div>
       </main>
     </div>
