@@ -31,6 +31,7 @@ const Home: NextPage = () => {
 const BoardCreation = () => {
   const router = useRouter();
   const [boardName, setboardName] = useState("");
+  const [boardDescription, setBoardDescription] = useState("");
 
   const { mutate, isLoading } = api.board.create.useMutation({
     onSuccess: async ({ boardId }) => {
@@ -44,17 +45,25 @@ const BoardCreation = () => {
   }
 
   return (
-    <div className="flex w-full gap-4">
+    <div className="flex w-full flex-col gap-4">
       <input
-        className="flex-1 rounded-md border-2 bg-transparent px-2 py-2 text-white outline-none"
+        className="h-[48px] w-full rounded-sm border-b-2 border-slate-500 bg-slate-800 p-2  pr-16 outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-slate-900"
         type="text"
         placeholder="board Name"
         value={boardName}
         onChange={(e) => setboardName(e.target.value)}
       />
+      <textarea
+        value={boardDescription}
+        onChange={(e) => {
+          setBoardDescription(e.target.value);
+        }}
+        placeholder="board Description"
+        className="h-[100px] w-full rounded-sm border-b-2 border-slate-500 bg-slate-800 p-2  pr-16 outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+      />
       <button
         onClick={() => {
-          mutate({ name: boardName });
+          mutate({ name: boardName, description: boardDescription });
         }}
       >
         Create

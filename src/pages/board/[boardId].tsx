@@ -61,12 +61,10 @@ const Board: NextPage = () => {
         <div className="h-min-30 w-full bg-slate-800">
           <div className="container my-6">
             <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
-              {board && <div>{board.name}</div>}
+              <div>{board.name}</div>
             </h3>
             <p className="mt-2 w-1/2 break-normal leading-6">
-              Once upon a time, in a far-off land, there was a very lazy king
-              who spent all day lounging on his throne. One day, his advisors
-              came to him with a problem: the kingdom was running out of money.
+              {board.description}
             </p>
           </div>
         </div>
@@ -77,7 +75,7 @@ const Board: NextPage = () => {
           </div>
           <div className="relative my-16 flex w-full items-center">
             <input
-              className="h-[48px] w-full rounded-sm border-b-2 border-slate-500 bg-slate-800 p-2  pr-16 outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+              className="h-[48px] w-full rounded-sm border-b-2 border-slate-500 bg-slate-800 p-2  pr-16 outline-none focus:ring-2 focus:ring-[#0098eb] focus:ring-offset-2 focus:ring-offset-slate-900"
               type="text"
               placeholder="Type your idea here..."
               value={idea}
@@ -103,6 +101,23 @@ const Board: NextPage = () => {
                 d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
               />
             </svg>
+          </div>
+        </div>
+        <div className="text-slate-00 grid w-full grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 p-4">
+          <div className="h-[230px] rounded-md border-2 border-sky-800 bg-sky-500 p-4">
+            text
+          </div>
+          <div className="h-[230px] rounded-md  border-2 border-sky-800 bg-sky-500 p-4">
+            text
+          </div>
+          <div className="h-[230px] rounded-md  border-2 border-sky-800 bg-sky-500  p-4">
+            text
+          </div>
+          <div className="h-[230px] rounded-md  border-2 border-sky-800 bg-sky-500  p-4">
+            text
+          </div>
+          <div className="h-[230px] rounded-md  border-2 border-sky-800 bg-sky-500  p-4">
+            text
           </div>
         </div>
       </main>

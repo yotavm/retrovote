@@ -15,8 +15,9 @@ model board {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
 
-    name      String @db.VarChar(255)
-    creatorId String
+    name        String  @db.VarChar(255)
+    description String? @db.VarChar(255)
+    creatorId   String
 
     ideas idea[]
 
