@@ -103,22 +103,17 @@ const Board: NextPage = () => {
             </svg>
           </div>
         </div>
-        <div className="text-slate-00 grid w-full grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 p-4">
-          <div className="h-[230px] rounded-md border-2 border-sky-800 bg-sky-500 p-4">
-            text
-          </div>
-          <div className="h-[230px] rounded-md  border-2 border-sky-800 bg-sky-500 p-4">
-            text
-          </div>
-          <div className="h-[230px] rounded-md  border-2 border-sky-800 bg-sky-500  p-4">
-            text
-          </div>
-          <div className="h-[230px] rounded-md  border-2 border-sky-800 bg-sky-500  p-4">
-            text
-          </div>
-          <div className="h-[230px] rounded-md  border-2 border-sky-800 bg-sky-500  p-4">
-            text
-          </div>
+        <div className="text-slate-00 grid w-full grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 p-4 text-slate-100">
+          {new Array(6).fill("a").map((_, i) => {
+            return (
+              <div
+                key={i}
+                className="h-[230px] rounded-md border-2 border-white border-opacity-60  bg-[linear-gradient(110.1deg,_rgba(46,_29,_99,_0.4)_0%,_#3D0F34_100%)] p-4"
+              >
+                <p>text</p>
+              </div>
+            );
+          })}
         </div>
       </main>
     </div>
