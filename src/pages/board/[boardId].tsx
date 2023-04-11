@@ -23,7 +23,7 @@ const Board: NextPage = () => {
   const router = useRouter();
   const { boardId } = router.query as RouterboardQuery;
   const { data: board, isLoading } = api.board.getById.useQuery({ boardId });
-  const [idea, setIdea] = useState("");
+  const [newIdea, setNewIdea] = useState("");
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -78,11 +78,11 @@ const Board: NextPage = () => {
               className="h-[48px] w-full rounded-sm border-b-2 border-slate-500 bg-slate-800 p-2  pr-16 outline-none focus:ring-2 focus:ring-[#0098eb] focus:ring-offset-2 focus:ring-offset-slate-900"
               type="text"
               placeholder="Type your idea here..."
-              value={idea}
-              onChange={(e) => setIdea(e.target.value)}
+              value={newIdea}
+              onChange={(e) => setNewIdea(e.target.value)}
               onKeyUp={(e) => {
                 if (e.key === "Enter") {
-                  console.log(idea);
+                  console.log(newIdea);
                 }
               }}
             />
@@ -93,7 +93,7 @@ const Board: NextPage = () => {
               strokeWidth={1.5}
               stroke="currentColor"
               className="absolute right-0 mx-2 h-6 w-6 cursor-pointer"
-              onClick={() => console.log(idea)}
+              onClick={() => console.log(newIdea)}
             >
               <path
                 strokeLinecap="round"
@@ -104,13 +104,13 @@ const Board: NextPage = () => {
           </div>
         </div>
         <div className="text-slate-00 grid w-full grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 p-4 text-slate-100">
-          {new Array(6).fill("a").map((_, i) => {
+          {board.ideas.map((idea, i) => {
             return (
               <div
                 key={i}
                 className="h-[230px] rounded-md border-2 border-white border-opacity-60  bg-[linear-gradient(110.1deg,_rgba(46,_29,_99,_0.4)_0%,_#3D0F34_100%)] p-4"
               >
-                <p>text</p>
+                <p>{idea.content}</p>
               </div>
             );
           })}

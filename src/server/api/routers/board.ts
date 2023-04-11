@@ -14,6 +14,9 @@ export const boardRouter = createTRPCRouter({
         where: {
           id: input.boardId,
         },
+        include: {
+          ideas: true,
+        },
       });
 
       if (!board) {
