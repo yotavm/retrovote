@@ -35,7 +35,7 @@ export const boardRouter = createTRPCRouter({
   create: authProcedure
     .input(
       z.object({
-        name: z.string(),
+        name: z.string().min(1).max(125),
         description: z.string(),
       })
     )
