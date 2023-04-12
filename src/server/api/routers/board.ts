@@ -15,7 +15,12 @@ export const boardRouter = createTRPCRouter({
           id: input.boardId,
         },
         include: {
-          ideas: true,
+          ideas: {
+            select: {
+              content: true,
+              boardId: true,
+            },
+          },
         },
       });
 
