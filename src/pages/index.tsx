@@ -3,6 +3,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
@@ -37,6 +38,10 @@ const BoardCreation = () => {
     onSuccess: async ({ boardId }) => {
       setboardName("");
       await router.push(`board/${boardId}`);
+    },
+    onError: (err) => {
+      console.log(err);
+      toast.error("This didn't work.");
     },
   });
 
