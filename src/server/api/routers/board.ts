@@ -50,4 +50,27 @@ export const boardRouter = createTRPCRouter({
       });
       return { boardId: board.id };
     }),
+  update: authProcedure
+    .input(
+      z.object({
+        boardId: z.string(),
+        settingName: z.enum(["showIdeas", "voteLimit", "openForVoting"]),
+        value: z.union([z.boolean(), z.number()]),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { settingName, value } = input;
+      const board = await ctx.prisma.board.update({
+        where: {
+          creatorId_id: {
+            creatorId: ctx.currentUser,
+            id: input.boardId,
+          },
+        },
+        data: {
+          [settingName]: value,
+        },
+      });
+      return board;
+    }),
 });
