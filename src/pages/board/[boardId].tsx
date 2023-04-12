@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import { TopBar } from "~/components/TopBar";
 import { api } from "~/utils/api";
 
@@ -23,12 +24,22 @@ const Board: NextPage = () => {
           { boardId },
           {
             ...previousBoard,
-            ideas: [...previousBoard.ideas, { content, boardId }],
+            ideas: [
+              ...previousBoard.ideas,
+              { content, boardId, id: "temp-id" },
+            ],
           }
         );
       }
 
       return { previousBoard };
+    },
+    onError: (err, { boardId }, context) => {
+      if (context?.previousBoard) {
+        utils.board.getById.setData({ boardId }, context.previousBoard);
+      }
+      toast.error("This didn't work.");
+      console.log(err);
     },
   });
   const [newIdea, setNewIdea] = useState("");
@@ -90,6 +101,7 @@ const Board: NextPage = () => {
               onChange={(e) => setNewIdea(e.target.value)}
               onKeyUp={(e) => {
                 if (e.key === "Enter") {
+                  e.preventDefault();
                   createIdea({ boardId, content: newIdea });
                 }
               }}
