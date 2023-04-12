@@ -21,8 +21,27 @@ const TopBar = () => {
 
 const Board: NextPage = () => {
   const router = useRouter();
+  const utils = api.useContext();
   const { boardId } = router.query as RouterboardQuery;
   const { data: board, isLoading } = api.board.getById.useQuery({ boardId });
+  const { mutate: createIdea } = api.idea.create.useMutation({
+    onMutate: async ({ boardId, content }) => {
+      await utils.board.getById.cancel({ boardId });
+      const previousBoard = utils.board.getById.getData({ boardId });
+
+      if (previousBoard) {
+        utils.board.getById.setData(
+          { boardId },
+          {
+            ...previousBoard,
+            ideas: [...previousBoard.ideas, { content, boardId }],
+          }
+        );
+      }
+
+      return { previousBoard };
+    },
+  });
   const [newIdea, setNewIdea] = useState("");
 
   if (isLoading) {
@@ -82,7 +101,7 @@ const Board: NextPage = () => {
               onChange={(e) => setNewIdea(e.target.value)}
               onKeyUp={(e) => {
                 if (e.key === "Enter") {
-                  console.log(newIdea);
+                  createIdea({ boardId, content: newIdea });
                 }
               }}
             />
@@ -93,7 +112,9 @@ const Board: NextPage = () => {
               strokeWidth={1.5}
               stroke="currentColor"
               className="absolute right-0 mx-2 h-6 w-6 cursor-pointer"
-              onClick={() => console.log(newIdea)}
+              onClick={() => {
+                createIdea({ boardId, content: newIdea });
+              }}
             >
               <path
                 strokeLinecap="round"
