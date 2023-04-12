@@ -3,19 +3,19 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { TopBar } from "~/components/TopBar";
-import { api } from "~/utils/api";
+import { type RouterOutputs, api } from "~/utils/api";
 
 type RouterboardQuery = {
   boardId: string;
 };
+type Ideas = RouterOutputs["board"]["getById"]["ideas"];
 type IdeasProps = {
   boardId: string;
+  ideas: Ideas;
 };
-
 const Ideas = (Props: IdeasProps) => {
   const utils = api.useContext();
-  const { boardId } = Props;
-  const board = utils.board.getById.getData({ boardId });
+  const { boardId, ideas } = Props;
   const { mutate: createIdea } = api.idea.create.useMutation({
     onMutate: async ({ boardId, content }) => {
       await utils.board.getById.cancel({ boardId });
@@ -87,7 +87,7 @@ const Ideas = (Props: IdeasProps) => {
         </div>
       </div>
       <div className="text-slate-00 grid w-full grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 p-4 text-slate-100">
-        {board.ideas.map((idea, i) => {
+        {ideas.map((idea, i) => {
           return (
             <div
               key={i}
@@ -118,6 +118,7 @@ const Board: NextPage = () => {
   return (
     <div>
       <TopBar />
+
       <main className="flex min-h-screen flex-col">
         <div className="h-10 w-full bg-slate-700">
           <div className="container flex h-full flex-row items-center justify-between">
@@ -140,6 +141,7 @@ const Board: NextPage = () => {
             </div>
           </div>
         </div>
+
         <div className="h-min-30 w-full bg-slate-800">
           <div className="container my-6">
             <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
@@ -150,7 +152,7 @@ const Board: NextPage = () => {
             </p>
           </div>
         </div>
-        <Ideas boardId={boardId} />
+        <Ideas boardId={boardId} ideas={board.ideas} />
       </main>
     </div>
   );

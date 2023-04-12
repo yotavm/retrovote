@@ -28,13 +28,13 @@ export const ideaRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { content, boardId } = input;
-      const board = await ctx.prisma.idea.create({
+      const idea = await ctx.prisma.idea.create({
         data: {
           content,
           boardId,
           creatorId: "1",
         },
       });
-      return { boardId: board.id };
+      return idea;
     }),
 });
