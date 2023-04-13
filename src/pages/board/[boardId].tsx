@@ -121,7 +121,7 @@ const Ideas = (Props: IdeasProps) => {
         </div>
       </div>
       <div className="text-slate-00 grid w-full cursor-pointer grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 p-4 text-slate-100">
-        {ideas.map((idea, i) => {
+        {sortIdeas.map((idea, i) => {
           return (
             <div
               key={i}
