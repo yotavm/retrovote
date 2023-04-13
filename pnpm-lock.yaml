@@ -10,14 +10,17 @@ specifiers:
   '@trpc/next': ^10.18.0
   '@trpc/react-query': ^10.18.0
   '@trpc/server': ^10.18.0
+  '@types/cookie': ^0.5.1
   '@types/eslint': ^8.21.3
   '@types/node': ^18.15.5
   '@types/prettier': ^2.7.2
   '@types/react': ^18.0.28
   '@types/react-dom': ^18.0.11
+  '@types/uuid': ^9.0.1
   '@typescript-eslint/eslint-plugin': ^5.56.0
   '@typescript-eslint/parser': ^5.56.0
   autoprefixer: ^10.4.14
+  cookie: ^0.5.0
   csstype: ^3.1.2
   eslint: ^8.36.0
   eslint-config-next: ^13.2.4
@@ -33,6 +36,7 @@ specifiers:
   superjson: 1.12.2
   tailwindcss: ^3.2.7
   typescript: ^5.0.2
+  uuid: ^9.0.0
   zod: ^3.21.4
 
 dependencies:
@@ -45,6 +49,7 @@ dependencies:
   '@trpc/next': 10.18.0_fk7ybuwqrs7skzzxcj6wjc5c3i
   '@trpc/react-query': 10.18.0_rcvfzig2xktluz4p7kugxqlbwi
   '@trpc/server': 10.18.0
+  cookie: 0.5.0
   csstype: 3.1.2
   lucide-react: 0.144.0_react@18.2.0
   next: 13.2.4_biqbaboplfbrettd7655fr4n2y
@@ -52,14 +57,17 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-hot-toast: 2.4.0_s7mghcr6idhb4d5ook54gl4n44
   superjson: 1.12.2
+  uuid: 9.0.0
   zod: 3.21.4
 
 devDependencies:
+  '@types/cookie': 0.5.1
   '@types/eslint': 8.21.3
   '@types/node': 18.15.9
   '@types/prettier': 2.7.2
   '@types/react': 18.0.29
   '@types/react-dom': 18.0.11
+  '@types/uuid': 9.0.1
   '@typescript-eslint/eslint-plugin': 5.56.0_2hcjazgfnbtq42tcc73br2vup4
   '@typescript-eslint/parser': 5.56.0_j4766f7ecgqbon3u7zlxn5zszu
   autoprefixer: 10.4.14_postcss@8.4.21
@@ -811,6 +819,10 @@ packages:
       '@types/node': 18.15.9
     dev: false
 
+  /@types/cookie/0.5.1:
+    resolution: {integrity: sha512-COUnqfB2+ckwXXSFInsFdOAWQzCCx+a5hq2ruyj+Vjund94RJQd4LG2u9hnvJrTgunKAaax7ancBYlDrNYxA0g==}
+    dev: true
+
   /@types/cookies/0.7.7:
     resolution: {integrity: sha512-h7BcvPUogWbKCzBR2lY4oqaZbO3jXZksexYJVFvkrFeLgbZjQkU4x8pRq6eg2MHXQhY0McQdqmmsxRWlVAHooA==}
     dependencies:
@@ -919,6 +931,10 @@ packages:
       '@types/mime': 3.0.1
       '@types/node': 18.15.9
     dev: false
+
+  /@types/uuid/9.0.1:
+    resolution: {integrity: sha512-rFT3ak0/2trgvp4yYZo5iKFEPsET7vKydKF+VRCxlQ9bpheehyAJH89dAkaLEq/j/RZXJIqcgsmPJKUP1Z28HA==}
+    dev: true
 
   /@typescript-eslint/eslint-plugin/5.56.0_2hcjazgfnbtq42tcc73br2vup4:
     resolution: {integrity: sha512-ZNW37Ccl3oMZkzxrYDUX4o7cnuPgU+YrcaYXzsRtLB16I1FR5SHMqga3zGsaSliZADCWo2v8qHWqAYIj8nWCCg==}
@@ -3557,6 +3573,11 @@ packages:
   /util-deprecate/1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
+
+  /uuid/9.0.0:
+    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+    hasBin: true
+    dev: false
 
   /webcrypto-core/1.7.7:
     resolution: {integrity: sha512-7FjigXNsBfopEj+5DV2nhNpfic2vumtjjgPmeDKk45z+MJwXKKfhPB7118Pfzrmh4jqOMST6Ch37iPAHoImg5g==}
