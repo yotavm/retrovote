@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/Popover";
 import { Switch } from "~/components/Switch";
@@ -16,11 +16,20 @@ type IdeasProps = {
   ideas: Ideas;
   openForVoting: boolean;
   voteLimit: number;
+  sort: boolean;
 };
 const Ideas = (Props: IdeasProps) => {
-  const { boardId, ideas, openForVoting } = Props;
+  const { boardId, ideas, openForVoting, sort } = Props;
   const ctx = api.useContext();
   const [newIdea, setNewIdea] = useState("");
+  const sortIdeas = useMemo(() => {
+    if (sort) {
+      return ideas.sort((a, b) => {
+        return b.vote.length - a.vote.length;
+      });
+    }
+    return ideas;
+  }, [ideas, sort]);
   const { mutate: createIdea } = api.idea.create.useMutation({
     onMutate: async ({ boardId, content }) => {
       await ctx.board.getById.cancel({ boardId });
@@ -140,12 +149,16 @@ const BoardSetting = ({
   showIdeas,
   voteLimit,
   privateVoteing,
+  sort,
+  setSort,
 }: {
   boardId: string;
   openForVoting: boolean;
   showIdeas: boolean;
   voteLimit: number;
   privateVoteing: boolean;
+  sort: boolean;
+  setSort: (sort: boolean) => void;
 }) => {
   const ctx = api.useContext();
   const { mutate: updateBoard } = api.board.update.useMutation({
@@ -190,7 +203,7 @@ const BoardSetting = ({
           </svg>
         </div>
       </PopoverTrigger>
-      <PopoverContent>
+      <PopoverContent asChild className="w-96">
         <div className="grid gap-4">
           <div className="space-y-2">
             <h4 className="font-medium leading-none">Settings</h4>
@@ -201,7 +214,7 @@ const BoardSetting = ({
           <div className="grid gap-2">
             <div className="grid grid-cols-3 items-center gap-4">
               <label htmlFor="Sort">Sort</label>
-              <button>Sort</button>
+              <button onClick={() => setSort(true)}>Sort</button>
             </div>
             <div className="grid grid-cols-3 items-center gap-4">
               <label htmlFor="Open Voting">Open Voting</label>
@@ -254,7 +267,7 @@ const Board: NextPage = () => {
   const router = useRouter();
   const { boardId } = router.query as RouterboardQuery;
   const { data: board, isLoading } = api.board.getById.useQuery({ boardId });
-
+  const [sort, setSort] = useState(false);
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -277,6 +290,8 @@ const Board: NextPage = () => {
               showIdeas={board.showIdeas}
               voteLimit={board.voteLimit}
               privateVoteing={board.privateVoteing}
+              sort={sort}
+              setSort={setSort}
             />
           </div>
         </div>
@@ -296,6 +311,7 @@ const Board: NextPage = () => {
           ideas={board.ideas}
           openForVoting={board.openForVoting}
           voteLimit={board.voteLimit}
+          sort={sort}
         />
       </main>
     </div>
