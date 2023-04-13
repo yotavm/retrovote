@@ -12,6 +12,7 @@ specifiers:
   '@trpc/server': ^10.18.0
   '@types/cookie': ^0.5.1
   '@types/eslint': ^8.21.3
+  '@types/lodash': ^4.14.192
   '@types/node': ^18.15.5
   '@types/prettier': ^2.7.2
   '@types/react': ^18.0.28
@@ -24,6 +25,7 @@ specifiers:
   csstype: ^3.1.2
   eslint: ^8.36.0
   eslint-config-next: ^13.2.4
+  lodash: ^4.17.21
   lucide-react: ^0.144.0
   next: ^13.2.4
   postcss: ^8.4.21
@@ -51,6 +53,7 @@ dependencies:
   '@trpc/server': 10.18.0
   cookie: 0.5.0
   csstype: 3.1.2
+  lodash: 4.17.21
   lucide-react: 0.144.0_react@18.2.0
   next: 13.2.4_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
@@ -63,6 +66,7 @@ dependencies:
 devDependencies:
   '@types/cookie': 0.5.1
   '@types/eslint': 8.21.3
+  '@types/lodash': 4.14.192
   '@types/node': 18.15.9
   '@types/prettier': 2.7.2
   '@types/react': 18.0.29
@@ -871,6 +875,10 @@ packages:
   /@types/keygrip/1.0.2:
     resolution: {integrity: sha512-GJhpTepz2udxGexqos8wgaBx4I/zWIDPh/KOGEwAqtuGDkOUJu5eFvwmdBX4AmB8Odsr+9pHCQqiAqDL/yKMKw==}
     dev: false
+
+  /@types/lodash/4.14.192:
+    resolution: {integrity: sha512-km+Vyn3BYm5ytMO13k9KTp27O75rbQ0NFw+U//g+PX7VZyjCioXaRFisqSIJRECljcTv73G3i6BpglNGHgUQ5A==}
+    dev: true
 
   /@types/mime/3.0.1:
     resolution: {integrity: sha512-Y4XFY5VJAuw0FgAqPNd6NNoV44jbq9Bz2L7Rh/J6jLTiHBSBJa9fxqQIvkIld4GsoDOcCbvzOUAbLPsSKKg+uA==}
@@ -2492,6 +2500,10 @@ packages:
   /lodash.merge/4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
     dev: true
+
+  /lodash/4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: false
 
   /loose-envify/1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}

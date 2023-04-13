@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { filter } from "lodash";
 import {
   authProcedure,
   createTRPCRouter,
@@ -20,6 +21,7 @@ export const boardRouter = createTRPCRouter({
               content: true,
               boardId: true,
               id: true,
+              creatorId: true,
             },
           },
         },
@@ -29,7 +31,24 @@ export const boardRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND" });
       }
 
-      return board;
+      if (board.creatorId === ctx.currentUser) {
+        return board;
+      }
+
+      console.log("board", board);
+
+      if (!board.showIdeas) {
+        const userIdeas = filter(board.ideas, {
+          creatorId: ctx.anyanomesUser,
+        }) as typeof board.ideas;
+
+        return {
+          ...board,
+          ideas: userIdeas,
+        };
+      } else {
+        return board;
+      }
     }),
 
   create: authProcedure

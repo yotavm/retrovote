@@ -32,7 +32,7 @@ export const ideaRouter = createTRPCRouter({
         data: {
           content,
           boardId,
-          creatorId: "1",
+          creatorId: ctx.currentUser || ctx.anyanomesUser,
         },
       });
       return idea;
