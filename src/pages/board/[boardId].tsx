@@ -181,7 +181,7 @@ const Board: NextPage = () => {
                         onCheckedChange={(e) => {
                           saveBoardSettings("openForVoting", e);
                         }}
-                        defaultChecked={board.openForVoting as boolean}
+                        defaultChecked={board.openForVoting}
                       />
                     </div>
                     <div className="grid grid-cols-3 items-center gap-4">
@@ -190,7 +190,7 @@ const Board: NextPage = () => {
                         onCheckedChange={(e) => {
                           saveBoardSettings("showIdeas", e);
                         }}
-                        defaultChecked={board.showIdeas as boolean}
+                        defaultChecked={board.showIdeas}
                       />
                     </div>
                     <div className="grid grid-cols-3 items-center gap-4">
