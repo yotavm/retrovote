@@ -31,7 +31,7 @@ const Ideas = (Props: IdeasProps) => {
             ...previousBoard,
             ideas: [
               ...previousBoard.ideas,
-              { content, boardId, id: "temp-id" },
+              { content, boardId, id: "temp-id", creatorId: "temp-id" },
             ],
           }
         );
