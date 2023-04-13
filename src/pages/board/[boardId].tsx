@@ -1,3 +1,4 @@
+import { useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
@@ -265,6 +266,7 @@ const BoardSetting = ({
 
 const Board: NextPage = () => {
   const router = useRouter();
+  const { user } = useUser();
   const { boardId } = router.query as RouterboardQuery;
   const { data: board, isLoading } = api.board.getById.useQuery(
     { boardId },
@@ -289,15 +291,17 @@ const Board: NextPage = () => {
         <div className="h-10 w-full bg-slate-700">
           <div className="container flex h-full flex-row items-center justify-between">
             <div className="text-sm text-slate-400">Members</div>
-            <BoardSetting
-              boardId={boardId}
-              openForVoting={board.openForVoting}
-              showIdeas={board.showIdeas}
-              voteLimit={board.voteLimit}
-              privateVoteing={board.privateVoteing}
-              sort={sort}
-              setSort={setSort}
-            />
+            {user?.id === board.creatorId && (
+              <BoardSetting
+                boardId={boardId}
+                openForVoting={board.openForVoting}
+                showIdeas={board.showIdeas}
+                voteLimit={board.voteLimit}
+                privateVoteing={board.privateVoteing}
+                sort={sort}
+                setSort={setSort}
+              />
+            )}
           </div>
         </div>
 
