@@ -37,4 +37,44 @@ export const ideaRouter = createTRPCRouter({
       });
       return idea;
     }),
+  addVote: publicProcedure
+    .input(
+      z
+        .object({
+          ideaId: z.string(),
+          boardId: z.string(),
+        })
+        .required()
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { ideaId, boardId } = input;
+      const board = await ctx.prisma.board.findUnique({
+        where: {
+          id: boardId,
+        },
+      });
+
+      if (board?.openForVoting === false) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Voting is not open for this board",
+        });
+      }
+
+      const vote = await ctx.prisma.vote.create({
+        data: {
+          ideaId,
+          creatorId: ctx.currentUser || ctx.anyanomesUser,
+        },
+      });
+
+      if (!board || !vote) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Could not create vote",
+        });
+      }
+
+      return vote;
+    }),
 });

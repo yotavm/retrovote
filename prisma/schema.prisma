@@ -36,10 +36,24 @@ model idea {
     creatorId String
     content   String @db.VarChar(255)
 
-    boardId   String
-    voteCount Int    @default(0)
+    boardId String
 
-    board board @relation(fields: [boardId], references: [id])
+    board board  @relation(fields: [boardId], references: [id])
+    vote  vote[]
 
     @@index([boardId, creatorId])
+}
+
+model vote {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+
+    creatorId String
+    count     Int?   @default(1)
+
+    ideaId String
+
+    idea idea @relation(fields: [ideaId], references: [id])
+
+    @@index([ideaId])
 }

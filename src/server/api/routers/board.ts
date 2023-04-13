@@ -21,6 +21,7 @@ export const boardRouter = createTRPCRouter({
               boardId: true,
               id: true,
               creatorId: true,
+              vote: true,
             },
           },
         },

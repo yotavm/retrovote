@@ -14,9 +14,11 @@ type Ideas = RouterOutputs["board"]["getById"]["ideas"];
 type IdeasProps = {
   boardId: string;
   ideas: Ideas;
+  openForVoting: boolean;
+  voteLimit: number;
 };
 const Ideas = (Props: IdeasProps) => {
-  const { boardId, ideas } = Props;
+  const { boardId, ideas, openForVoting } = Props;
   const ctx = api.useContext();
   const [newIdea, setNewIdea] = useState("");
   const { mutate: createIdea } = api.idea.create.useMutation({
@@ -31,7 +33,13 @@ const Ideas = (Props: IdeasProps) => {
             ...previousBoard,
             ideas: [
               ...previousBoard.ideas,
-              { content, boardId, id: "temp-id", creatorId: "temp-id" },
+              {
+                content,
+                boardId,
+                id: "temp-id",
+                creatorId: "temp-id",
+                vote: [],
+              },
             ],
           }
         );
@@ -46,7 +54,22 @@ const Ideas = (Props: IdeasProps) => {
       toast.error("This didn't work.");
       console.log(err);
     },
+    onSuccess: () => {
+      void ctx.board.getById.invalidate();
+    },
   });
+
+  const { mutate: addVote } = api.idea.addVote.useMutation({
+    onSuccess: () => {
+      void ctx.board.getById.invalidate();
+    },
+  });
+
+  const handleVoting = (ideaId: string) => {
+    if (openForVoting) {
+      addVote({ boardId, ideaId });
+    }
+  };
 
   return (
     <>
@@ -88,14 +111,21 @@ const Ideas = (Props: IdeasProps) => {
           </svg>
         </div>
       </div>
-      <div className="text-slate-00 grid w-full grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 p-4 text-slate-100">
+      <div className="text-slate-00 grid w-full cursor-pointer grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 p-4 text-slate-100">
         {ideas.map((idea, i) => {
           return (
             <div
               key={i}
-              className="h-[230px] rounded-md border-2 border-white border-opacity-60  bg-[linear-gradient(110.1deg,_rgba(46,_29,_99,_0.4)_0%,_#3D0F34_100%)] p-4"
+              className="relative h-[230px] rounded-md border-2 border-white  border-opacity-60 bg-[linear-gradient(110.1deg,_rgba(46,_29,_99,_0.4)_0%,_#3D0F34_100%)] p-4"
+              onClick={() => handleVoting(idea.id)}
             >
               <p>{idea.content}</p>
+              {idea.vote.length > 0 && (
+                <div className="absolute right-0 bottom-0 m-2 flex w-10 items-center justify-center rounded-xl bg-slate-700 p-1 text-sm">
+                  <p>{idea.vote.length}</p>
+                  <p>☝️</p>
+                </div>
+              )}
             </div>
           );
         })}
@@ -226,7 +256,12 @@ const Board: NextPage = () => {
             </p>
           </div>
         </div>
-        <Ideas boardId={boardId} ideas={board.ideas} />
+        <Ideas
+          boardId={boardId}
+          ideas={board.ideas}
+          openForVoting={board.openForVoting}
+          voteLimit={board.voteLimit}
+        />
       </main>
     </div>
   );
