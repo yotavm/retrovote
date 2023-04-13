@@ -266,7 +266,12 @@ const BoardSetting = ({
 const Board: NextPage = () => {
   const router = useRouter();
   const { boardId } = router.query as RouterboardQuery;
-  const { data: board, isLoading } = api.board.getById.useQuery({ boardId });
+  const { data: board, isLoading } = api.board.getById.useQuery(
+    { boardId },
+    {
+      refetchInterval: 10000,
+    }
+  );
   const [sort, setSort] = useState(false);
   if (isLoading) {
     return <div>Loading...</div>;
