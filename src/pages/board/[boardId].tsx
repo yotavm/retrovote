@@ -203,7 +203,7 @@ const BoardSetting = ({
           </svg>
         </div>
       </PopoverTrigger>
-      <PopoverContent asChild className="w-96">
+      <PopoverContent>
         <div className="grid gap-4">
           <div className="space-y-2">
             <h4 className="font-medium leading-none">Settings</h4>
