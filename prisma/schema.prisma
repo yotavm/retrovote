@@ -21,9 +21,10 @@ model board {
 
     ideas idea[]
 
-    voteLimit     Int     @default(3)
-    openForVoting Boolean @default(false)
-    showIdeas     Boolean @default(false)
+    voteLimit      Int     @default(3)
+    openForVoting  Boolean @default(false)
+    showIdeas      Boolean @default(false)
+    privateVoteing Boolean @default(true)
 
     @@unique([creatorId, id])
     @@index([creatorId])

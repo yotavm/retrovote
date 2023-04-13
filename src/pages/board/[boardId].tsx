@@ -134,11 +134,20 @@ const Ideas = (Props: IdeasProps) => {
   );
 };
 
-const Board: NextPage = () => {
+const BoardSetting = ({
+  boardId,
+  openForVoting,
+  showIdeas,
+  voteLimit,
+  privateVoteing,
+}: {
+  boardId: string;
+  openForVoting: boolean;
+  showIdeas: boolean;
+  voteLimit: number;
+  privateVoteing: boolean;
+}) => {
   const ctx = api.useContext();
-  const router = useRouter();
-  const { boardId } = router.query as RouterboardQuery;
-  const { data: board, isLoading } = api.board.getById.useQuery({ boardId });
   const { mutate: updateBoard } = api.board.update.useMutation({
     onError: (err) => {
       toast.error("This didn't work.");
@@ -151,7 +160,7 @@ const Board: NextPage = () => {
   });
 
   const saveBoardSettings = (
-    name: "showIdeas" | "voteLimit" | "openForVoting",
+    name: "showIdeas" | "voteLimit" | "openForVoting" | "privateVoteing",
     value: boolean | number
   ) => {
     updateBoard({
@@ -160,6 +169,91 @@ const Board: NextPage = () => {
       value,
     });
   };
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <div className="cursor-pointer text-slate-400">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="h-6 w-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
+            />
+          </svg>
+        </div>
+      </PopoverTrigger>
+      <PopoverContent>
+        <div className="grid gap-4">
+          <div className="space-y-2">
+            <h4 className="font-medium leading-none">Settings</h4>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              Set the Board Settings.
+            </p>
+          </div>
+          <div className="grid gap-2">
+            <div className="grid grid-cols-3 items-center gap-4">
+              <label htmlFor="Sort">Sort</label>
+              <button>Sort</button>
+            </div>
+            <div className="grid grid-cols-3 items-center gap-4">
+              <label htmlFor="Open Voting">Open Voting</label>
+              <Switch
+                onCheckedChange={(e) => {
+                  saveBoardSettings("openForVoting", e);
+                }}
+                defaultChecked={openForVoting}
+              />
+            </div>
+            <div className="grid grid-cols-3 items-center gap-4">
+              <label htmlFor="Private Voteing">Private Voteing</label>
+              <Switch
+                onCheckedChange={(e) => {
+                  saveBoardSettings("privateVoteing", e);
+                }}
+                defaultChecked={privateVoteing}
+              />
+            </div>
+            <div className="grid grid-cols-3 items-center gap-4">
+              <label htmlFor="Show Ideas">Show Ideas</label>
+              <Switch
+                onCheckedChange={(e) => {
+                  saveBoardSettings("showIdeas", e);
+                }}
+                defaultChecked={showIdeas}
+              />
+            </div>
+            <div className="grid grid-cols-3 items-center gap-4">
+              <label htmlFor="votes">Votes</label>
+              <input
+                name="votes"
+                defaultValue={voteLimit}
+                type="number"
+                max={10}
+                onChange={(e) => {
+                  saveBoardSettings("voteLimit", parseInt(e.target.value));
+                }}
+                className="no-spinner h-8 w-6 rounded-sm  border-b-2  border-slate-500 bg-transparent bg-slate-800 text-center outline-none focus:ring-2 focus:ring-[#0098eb] focus:ring-offset-2 focus:ring-offset-slate-900"
+              />
+            </div>
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+const Board: NextPage = () => {
+  const router = useRouter();
+  const { boardId } = router.query as RouterboardQuery;
+  const { data: board, isLoading } = api.board.getById.useQuery({ boardId });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -177,72 +271,12 @@ const Board: NextPage = () => {
         <div className="h-10 w-full bg-slate-700">
           <div className="container flex h-full flex-row items-center justify-between">
             <div className="text-sm text-slate-400">Members</div>
-            <Popover>
-              <PopoverTrigger asChild>
-                <div className="cursor-pointer text-slate-400">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="h-6 w-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
-                    />
-                  </svg>
-                </div>
-              </PopoverTrigger>
-              <PopoverContent>
-                <div className="grid gap-4">
-                  <div className="space-y-2">
-                    <h4 className="font-medium leading-none">Settings</h4>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
-                      Set the Board Settings.
-                    </p>
-                  </div>
-                  <div className="grid gap-2">
-                    <div className="grid grid-cols-3 items-center gap-4">
-                      <label htmlFor="Open Voting">Open Voting</label>
-                      <Switch
-                        onCheckedChange={(e) => {
-                          saveBoardSettings("openForVoting", e);
-                        }}
-                        defaultChecked={board.openForVoting}
-                      />
-                    </div>
-                    <div className="grid grid-cols-3 items-center gap-4">
-                      <label htmlFor="Show Ideas">Show Ideas</label>
-                      <Switch
-                        onCheckedChange={(e) => {
-                          saveBoardSettings("showIdeas", e);
-                        }}
-                        defaultChecked={board.showIdeas}
-                      />
-                    </div>
-                    <div className="grid grid-cols-3 items-center gap-4">
-                      <label htmlFor="votes">Votes</label>
-                      <input
-                        name="votes"
-                        defaultValue={board.voteLimit}
-                        type="number"
-                        max={10}
-                        onChange={(e) => {
-                          saveBoardSettings(
-                            "voteLimit",
-                            parseInt(e.target.value)
-                          );
-                        }}
-                        className="no-spinner h-8 w-6 rounded-sm  border-b-2  border-slate-500 bg-transparent bg-slate-800 text-center outline-none focus:ring-2 focus:ring-[#0098eb] focus:ring-offset-2 focus:ring-offset-slate-900"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
+            <BoardSetting
+              boardId={boardId}
+              openForVoting={board.openForVoting}
+              showIdeas={board.showIdeas}
+              voteLimit={board.voteLimit}
+            />
           </div>
         </div>
 
@@ -261,6 +295,7 @@ const Board: NextPage = () => {
           ideas={board.ideas}
           openForVoting={board.openForVoting}
           voteLimit={board.voteLimit}
+          privateVoteing={board.privateVoteing}
         />
       </main>
     </div>
