@@ -38,7 +38,7 @@ export const boardRouter = createTRPCRouter({
 
       if (!board.showIdeas) {
         const userIdeas = board.ideas.filter((idea) => {
-          return idea.creatorId === ctx.currentUser;
+          return idea.creatorId === ctx.anyanomesUser;
         });
 
         return {
