@@ -217,11 +217,11 @@ const BoardSetting = ({
             </p>
           </div>
           <div className="grid gap-2">
-            <div className="grid grid-cols-3 items-center gap-4">
+            <div className="grid grid-cols-2 items-center gap-4">
               <label htmlFor="Sort">Sort</label>
               <button onClick={() => setSort(true)}>Sort</button>
             </div>
-            <div className="grid grid-cols-3 items-center gap-4">
+            <div className="grid grid-cols-2 items-center gap-4">
               <label htmlFor="Open Voting">Open Voting</label>
               <Switch
                 onCheckedChange={(e) => {
@@ -230,7 +230,7 @@ const BoardSetting = ({
                 defaultChecked={openForVoting}
               />
             </div>
-            <div className="grid grid-cols-3 items-center gap-4">
+            <div className="grid grid-cols-2 items-center gap-4">
               <label htmlFor="Private Voteing">Private Voteing</label>
               <Switch
                 onCheckedChange={(e) => {
@@ -239,7 +239,7 @@ const BoardSetting = ({
                 defaultChecked={privateVoteing}
               />
             </div>
-            <div className="grid grid-cols-3 items-center gap-4">
+            <div className="grid grid-cols-2 items-center gap-4">
               <label htmlFor="Show Ideas">Show Ideas</label>
               <Switch
                 onCheckedChange={(e) => {
@@ -248,7 +248,7 @@ const BoardSetting = ({
                 defaultChecked={showIdeas}
               />
             </div>
-            <div className="grid grid-cols-3 items-center gap-4">
+            <div className="grid grid-cols-2 items-center gap-4">
               <label htmlFor="votes">Votes</label>
               <input
                 name="votes"
