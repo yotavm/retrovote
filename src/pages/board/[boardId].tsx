@@ -73,6 +73,10 @@ const Ideas = (Props: IdeasProps) => {
     onSuccess: () => {
       void ctx.board.getById.invalidate();
     },
+    onError: (err) => {
+      toast.error("This didn't work.");
+      console.log(err);
+    },
   });
 
   const handleVoting = (ideaId: string) => {

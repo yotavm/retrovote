@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import { sumBy } from "lodash";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
@@ -52,29 +53,60 @@ export const ideaRouter = createTRPCRouter({
         where: {
           id: boardId,
         },
-      });
-
-      if (board?.openForVoting === false) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Voting is not open for this board",
-        });
-      }
-
-      const vote = await ctx.prisma.vote.create({
-        data: {
-          ideaId,
-          creatorId: ctx.currentUser || ctx.anyanomesUser,
+        include: {
+          ideas: {
+            include: {
+              vote: {
+                where: {
+                  creatorId: ctx.currentUser || ctx.anyanomesUser,
+                },
+              },
+            },
+          },
         },
       });
 
-      if (!board || !vote) {
+      const idea = board?.ideas.find((idea) => {
+        return idea.id === ideaId;
+      });
+
+      if (!board || !idea) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Could not create vote",
         });
       }
 
-      return vote;
+      if (board.openForVoting === false) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Voting is not open for this board",
+        });
+      }
+
+      const userVoteCount = sumBy(board.ideas, (idea) => {
+        return idea.vote.length;
+      });
+
+      if (userVoteCount < board.voteLimit) {
+        const vote = await ctx.prisma.vote.create({
+          data: {
+            ideaId,
+            creatorId: ctx.currentUser || ctx.anyanomesUser,
+          },
+        });
+        if (!vote) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Could not create vote",
+          });
+        }
+        return vote;
+      } else {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You have reached your vote limit",
+        });
+      }
     }),
 });
