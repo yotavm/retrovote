@@ -38,18 +38,17 @@ export const boardRouter = createTRPCRouter({
       console.log("board", board);
 
       if (!board.showIdeas) {
-        const userIdeas = board.ideas
-          .filter((idea) => {
-            return idea.creatorId === ctx.anyanomesUser;
-          })
-          .map((idea) => {
-            return {
-              ...idea,
-              vote: idea.vote.filter((vote) => {
-                return vote.creatorId === ctx.anyanomesUser;
-              }),
-            };
+        const userIdeas = board.ideas.filter((idea) => {
+          return idea.creatorId === ctx.anyanomesUser;
+        });
+
+        if (board.privateVoteing) {
+          userIdeas.forEach((idea) => {
+            idea.vote = idea.vote.filter((vote) => {
+              return vote.creatorId === ctx.anyanomesUser;
+            });
           });
+        }
 
         return {
           ...board,

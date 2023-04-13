@@ -276,6 +276,7 @@ const Board: NextPage = () => {
               openForVoting={board.openForVoting}
               showIdeas={board.showIdeas}
               voteLimit={board.voteLimit}
+              privateVoteing={board.privateVoteing}
             />
           </div>
         </div>
