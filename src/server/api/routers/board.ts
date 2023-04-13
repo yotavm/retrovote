@@ -1,6 +1,5 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { filter } from "lodash";
 import {
   authProcedure,
   createTRPCRouter,
@@ -38,9 +37,9 @@ export const boardRouter = createTRPCRouter({
       console.log("board", board);
 
       if (!board.showIdeas) {
-        const userIdeas = filter(board.ideas, {
-          creatorId: ctx.anyanomesUser,
-        }) as typeof board.ideas;
+        const userIdeas = board.ideas.filter((idea) => {
+          return idea.creatorId === ctx.currentUser;
+        });
 
         return {
           ...board,
