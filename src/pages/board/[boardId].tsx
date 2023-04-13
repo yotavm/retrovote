@@ -1,6 +1,5 @@
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
-import { type } from "os";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/Popover";
@@ -69,6 +68,7 @@ const Ideas = (Props: IdeasProps) => {
               }
             }}
           />
+
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -181,7 +181,7 @@ const Board: NextPage = () => {
                         onCheckedChange={(e) => {
                           saveBoardSettings("openForVoting", e);
                         }}
-                        defaultChecked={board.openForVoting}
+                        defaultChecked={board.openForVoting as boolean}
                       />
                     </div>
                     <div className="grid grid-cols-3 items-center gap-4">
@@ -190,7 +190,7 @@ const Board: NextPage = () => {
                         onCheckedChange={(e) => {
                           saveBoardSettings("showIdeas", e);
                         }}
-                        defaultChecked={board.showIdeas}
+                        defaultChecked={board.showIdeas as boolean}
                       />
                     </div>
                     <div className="grid grid-cols-3 items-center gap-4">
