@@ -95,6 +95,7 @@ export const ideaRouter = createTRPCRouter({
             creatorId: ctx.currentUser || ctx.anyanomesUser,
           },
         });
+
         if (!vote) {
           throw new TRPCError({
             code: "BAD_REQUEST",
@@ -108,5 +109,31 @@ export const ideaRouter = createTRPCRouter({
           message: "You have reached your vote limit",
         });
       }
+    }),
+  removeVote: publicProcedure
+    .input(
+      z
+        .object({
+          ideaId: z.string(),
+          voteId: z.string(),
+        })
+        .required()
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { voteId } = input;
+      const vote = await ctx.prisma.vote.deleteMany({
+        where: {
+          id: voteId,
+          creatorId: ctx.currentUser || ctx.anyanomesUser,
+        },
+      });
+      if (!vote) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Could not delete vote",
+        });
+      }
+
+      return { success: true };
     }),
 });

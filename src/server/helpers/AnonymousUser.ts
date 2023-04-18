@@ -6,8 +6,8 @@ const setAnyanomesIdCookie = (res: NextApiResponse) => {
   const anyanomesId = uuidv4();
   const cookieName = "anyanomesId";
   const cookieOptions = {
-    httpOnly: true,
-    maxAge: 3600, // 1 hour
+    httpOnly: false,
+    maxAge: 3600 * 3, // 1 hour
     path: "/",
     sameSite: true,
     secure: process.env.NODE_ENV === "production",

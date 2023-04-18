@@ -7,6 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "~/components/Popover";
 import { Switch } from "~/components/Switch";
 import { TopBar } from "~/components/TopBar";
 import { type RouterOutputs, api } from "~/utils/api";
+import { getAnyanomesId } from "~/utils/cookies";
 
 type RouterboardQuery = {
   boardId: string;
@@ -19,10 +20,16 @@ type IdeasProps = {
   voteLimit: number;
   sort: boolean;
 };
+
 const Ideas = (Props: IdeasProps) => {
   const { boardId, ideas, openForVoting, sort } = Props;
   const ctx = api.useContext();
+  const { user } = useUser();
+  const currentUserId = user?.id || getAnyanomesId();
+
   const [newIdea, setNewIdea] = useState("");
+  console.log(ctx);
+
   const sortIdeas = useMemo(() => {
     if (sort) {
       return ideas.sort((a, b) => {
@@ -31,6 +38,7 @@ const Ideas = (Props: IdeasProps) => {
     }
     return ideas;
   }, [ideas, sort]);
+
   const { mutate: createIdea } = api.idea.create.useMutation({
     onMutate: async ({ boardId, content }) => {
       await ctx.board.getById.cancel({ boardId });
@@ -79,9 +87,27 @@ const Ideas = (Props: IdeasProps) => {
     },
   });
 
+  const { mutate: removeVote } = api.idea.removeVote.useMutation({
+    onSuccess: () => {
+      void ctx.board.getById.invalidate();
+    },
+    onError: (err) => {
+      toast.error("This didn't work.");
+      console.log(err);
+    },
+  });
+
   const handleVoting = (ideaId: string) => {
     if (openForVoting) {
       addVote({ boardId, ideaId });
+    }
+  };
+
+  const hadnleRemoveVote = (ideaId: string) => {
+    const idea = ideas.find((idea) => idea.id === ideaId);
+    const vote = idea?.vote.find((vote) => vote.creatorId === currentUserId);
+    if (vote) {
+      removeVote({ ideaId, voteId: vote.id });
     }
   };
 
@@ -113,7 +139,7 @@ const Ideas = (Props: IdeasProps) => {
             strokeWidth={1.5}
             stroke="currentColor"
             className="absolute right-0 mx-2 h-6 w-6 cursor-pointer"
-            onClick={() => {
+            onClick={(e) => {
               createIdea({ boardId, content: newIdea });
             }}
           >
@@ -135,7 +161,13 @@ const Ideas = (Props: IdeasProps) => {
             >
               <p>{idea.content}</p>
               {idea.vote.length > 0 && (
-                <div className="absolute right-0 bottom-0 m-2 flex w-10 items-center justify-center rounded-xl bg-slate-700 p-1 text-sm">
+                <div
+                  className="absolute right-0 bottom-0 z-10 m-2 flex w-10 items-center justify-center rounded-xl bg-slate-700 p-1 text-sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    hadnleRemoveVote(idea.id);
+                  }}
+                >
                   <p>{idea.vote.length}</p>
                   <p>☝️</p>
                 </div>
