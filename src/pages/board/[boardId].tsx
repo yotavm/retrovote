@@ -115,9 +115,15 @@ const Ideas = (Props: IdeasProps) => {
     <>
       <div className="container mt-16 flex h-full flex-col items-center justify-center">
         <div className="scroll-m-20 text-4xl font-semibold tracking-tight lg:text-4xl">
-          Add Ideas. Then Vote
+          {!openForVoting && "Add Ideas. Then Vote"}
+          {openForVoting && "Vote for your favorite ideas"}
         </div>
-        <div className="relative my-16 flex w-full items-center">
+
+        <div
+          className={`relative my-16 flex w-full items-center ${
+            openForVoting ? "invisible" : "visible"
+          }`}
+        >
           <input
             className="h-[48px] w-full rounded-sm border-b-2 border-slate-500 bg-slate-800 p-2  pr-16 outline-none focus:ring-2 focus:ring-[#0098eb] focus:ring-offset-2 focus:ring-offset-slate-900"
             type="text"

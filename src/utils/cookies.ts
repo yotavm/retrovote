@@ -1,6 +1,7 @@
 export const getAnyanomesId = () => {
   const cookieName = "anyanomesId";
-  const cookies = document.cookie
+  const cookieString = document.cookie;
+  const cookies = cookieString
     .split(";")
     .find((cookie) => {
       return cookie.startsWith(cookieName);
