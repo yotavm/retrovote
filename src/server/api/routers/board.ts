@@ -35,28 +35,26 @@ export const boardRouter = createTRPCRouter({
         return board;
       }
 
-      console.log("board", board);
+      let userIdeas = board.ideas;
+
+      if (board.privateVoteing) {
+        userIdeas.forEach((idea) => {
+          idea.vote = idea.vote.filter((vote) => {
+            return vote.creatorId === ctx.anyanomesUser;
+          });
+        });
+      }
 
       if (!board.showIdeas) {
-        const userIdeas = board.ideas.filter((idea) => {
+        userIdeas = userIdeas.filter((idea) => {
           return idea.creatorId === ctx.anyanomesUser;
         });
-
-        if (board.privateVoteing) {
-          userIdeas.forEach((idea) => {
-            idea.vote = idea.vote.filter((vote) => {
-              return vote.creatorId === ctx.anyanomesUser;
-            });
-          });
-        }
-
-        return {
-          ...board,
-          ideas: userIdeas,
-        };
-      } else {
-        return board;
       }
+
+      return {
+        ...board,
+        ideas: userIdeas,
+      };
     }),
 
   create: authProcedure
