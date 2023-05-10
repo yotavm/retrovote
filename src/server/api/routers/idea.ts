@@ -22,10 +22,12 @@ export const ideaRouter = createTRPCRouter({
 
   create: publicProcedure
     .input(
-      z.object({
-        content: z.string(),
-        boardId: z.string(),
-      })
+      z
+        .object({
+          content: z.string().nonempty(),
+          boardId: z.string().nonempty(),
+        })
+        .required()
     )
     .mutation(async ({ ctx, input }) => {
       const { content, boardId } = input;
