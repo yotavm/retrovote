@@ -27,6 +27,8 @@ export const boardRouter = createTRPCRouter({
         },
       });
 
+      const userId = ctx.currentUser || ctx.anyanomesUser;
+
       if (!board) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }
@@ -40,14 +42,14 @@ export const boardRouter = createTRPCRouter({
       if (board.privateVoteing) {
         userIdeas.forEach((idea) => {
           idea.vote = idea.vote.filter((vote) => {
-            return vote.creatorId === ctx.anyanomesUser;
+            return vote.creatorId === userId;
           });
         });
       }
 
       if (!board.showIdeas) {
         userIdeas = userIdeas.filter((idea) => {
-          return idea.creatorId === ctx.anyanomesUser;
+          return idea.creatorId === userId;
         });
       }
 

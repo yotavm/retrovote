@@ -40,6 +40,7 @@ export const ideaRouter = createTRPCRouter({
       });
       return idea;
     }),
+
   addVote: publicProcedure
     .input(
       z
@@ -112,6 +113,7 @@ export const ideaRouter = createTRPCRouter({
         });
       }
     }),
+
   removeVote: publicProcedure
     .input(
       z
