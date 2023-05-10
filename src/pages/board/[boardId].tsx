@@ -26,9 +26,7 @@ const Ideas = (Props: IdeasProps) => {
   const ctx = api.useContext();
   const { user } = useUser();
   const currentUserId = user?.id || getAnyanomesId();
-
   const [newIdea, setNewIdea] = useState("");
-  console.log(ctx);
 
   const sortIdeas = useMemo(() => {
     if (sort) {
@@ -74,6 +72,7 @@ const Ideas = (Props: IdeasProps) => {
     },
     onSuccess: () => {
       void ctx.board.getById.invalidate();
+      setNewIdea("");
     },
   });
 
