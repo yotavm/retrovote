@@ -13,12 +13,53 @@ type RouterboardQuery = {
   boardId: string;
 };
 type Ideas = RouterOutputs["board"]["getById"]["ideas"];
+type Vote = RouterOutputs["board"]["getById"]["ideas"][0]["vote"];
 type IdeasProps = {
   boardId: string;
   ideas: Ideas;
   openForVoting: boolean;
   voteLimit: number;
   sort: boolean;
+};
+
+const VoteCount = ({
+  votes,
+  creatorId,
+  ideaId,
+  handleRemoveVote,
+}: {
+  votes: Vote;
+  creatorId: string;
+  ideaId: string;
+  handleRemoveVote: (ideaId: string) => void;
+}) => {
+  const yourVotes = votes.filter((vote) => vote.creatorId === creatorId);
+  const otherVotes = votes.filter((vote) => vote.creatorId !== creatorId);
+
+  console.log(votes, yourVotes, otherVotes);
+
+  return (
+    <div className="absolute right-0 bottom-0 z-10 row-auto flex">
+      {yourVotes.length > 0 && (
+        <div
+          className="m-2 flex w-10 items-center justify-center rounded-xl bg-slate-700 p-1 text-sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleRemoveVote(ideaId);
+          }}
+        >
+          <p>{yourVotes.length}</p>
+          <p>❤️</p>
+        </div>
+      )}
+      {otherVotes.length > 0 && (
+        <div className="m-2 flex w-10 items-center justify-center rounded-xl bg-slate-700 p-1 text-sm">
+          <p>{otherVotes.length}</p>
+          <p>☝️</p>
+        </div>
+      )}
+    </div>
+  );
 };
 
 const Ideas = (Props: IdeasProps) => {
@@ -172,16 +213,12 @@ const Ideas = (Props: IdeasProps) => {
             >
               <p>{idea.content}</p>
               {idea.vote.length > 0 && (
-                <div
-                  className="absolute right-0 bottom-0 z-10 m-2 flex w-10 items-center justify-center rounded-xl bg-slate-700 p-1 text-sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRemoveVote(idea.id);
-                  }}
-                >
-                  <p>{idea.vote.length}</p>
-                  <p>☝️</p>
-                </div>
+                <VoteCount
+                  votes={idea.vote}
+                  creatorId={currentUserId}
+                  handleRemoveVote={handleRemoveVote}
+                  ideaId={idea.id}
+                />
               )}
             </div>
           );

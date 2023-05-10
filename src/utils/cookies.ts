@@ -7,5 +7,5 @@ export const getAnyanomesId = () => {
       return cookie.startsWith(cookieName);
     })
     ?.split("=")[1];
-  return cookies || null;
+  return cookies as string;
 };
