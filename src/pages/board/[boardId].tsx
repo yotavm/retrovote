@@ -102,11 +102,17 @@ const Ideas = (Props: IdeasProps) => {
     }
   };
 
-  const hadnleRemoveVote = (ideaId: string) => {
+  const handleRemoveVote = (ideaId: string) => {
     const idea = ideas.find((idea) => idea.id === ideaId);
     const vote = idea?.vote.find((vote) => vote.creatorId === currentUserId);
     if (vote) {
       removeVote({ ideaId, voteId: vote.id });
+    }
+  };
+
+  const handleAddVote = () => {
+    if (newIdea !== "") {
+      createIdea({ boardId, content: newIdea });
     }
   };
 
@@ -132,7 +138,7 @@ const Ideas = (Props: IdeasProps) => {
             onKeyUp={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
-                createIdea({ boardId, content: newIdea });
+                handleAddVote();
               }
             }}
           />
@@ -144,8 +150,8 @@ const Ideas = (Props: IdeasProps) => {
             strokeWidth={1.5}
             stroke="currentColor"
             className="absolute right-0 mx-2 h-6 w-6 cursor-pointer"
-            onClick={(e) => {
-              createIdea({ boardId, content: newIdea });
+            onClick={() => {
+              handleAddVote();
             }}
           >
             <path
@@ -170,7 +176,7 @@ const Ideas = (Props: IdeasProps) => {
                   className="absolute right-0 bottom-0 z-10 m-2 flex w-10 items-center justify-center rounded-xl bg-slate-700 p-1 text-sm"
                   onClick={(e) => {
                     e.stopPropagation();
-                    hadnleRemoveVote(idea.id);
+                    handleRemoveVote(idea.id);
                   }}
                 >
                   <p>{idea.vote.length}</p>
