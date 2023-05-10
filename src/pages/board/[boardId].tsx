@@ -212,14 +212,12 @@ const Ideas = (Props: IdeasProps) => {
               onClick={() => handleVoting(idea.id)}
             >
               <p>{idea.content}</p>
-              {idea.vote.length > 0 && (
-                <VoteCount
-                  votes={idea.vote}
-                  creatorId={currentUserId}
-                  handleRemoveVote={handleRemoveVote}
-                  ideaId={idea.id}
-                />
-              )}
+              <VoteCount
+                votes={idea.vote}
+                creatorId={currentUserId}
+                handleRemoveVote={handleRemoveVote}
+                ideaId={idea.id}
+              />
             </div>
           );
         })}
