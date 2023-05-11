@@ -28,14 +28,33 @@ const VoteCount = ({
   creatorId,
   ideaId,
   handleRemoveVote,
+  boardCreator,
 }: {
   votes: Vote;
   creatorId: string;
   ideaId: string;
   handleRemoveVote: (ideaId: string) => void;
+  boardCreator: boolean;
 }) => {
   const yourVotes = votes.filter((vote) => vote.creatorId === creatorId);
   const otherVotes = votes.filter((vote) => vote.creatorId !== creatorId);
+
+  if (boardCreator && votes.length > 0) {
+    return (
+      <div className="absolute right-0 bottom-0 z-10 row-auto flex">
+        <div
+          className="m-2 flex w-10 items-center justify-center rounded-xl bg-slate-700 p-1 text-sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleRemoveVote(ideaId);
+          }}
+        >
+          <p>{votes.length}</p>
+          <p>☝️</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="absolute right-0 bottom-0 z-10 row-auto flex">
@@ -227,6 +246,7 @@ const Ideas = (Props: IdeasProps) => {
                 creatorId={currentUserId}
                 handleRemoveVote={handleRemoveVote}
                 ideaId={idea.id}
+                boardCreator={boardCreatorId === currentUserId}
               />
               <div
                 className={`${
