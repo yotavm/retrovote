@@ -41,6 +41,32 @@ export const ideaRouter = createTRPCRouter({
       return idea;
     }),
 
+  delete: publicProcedure
+    .input(
+      z
+        .object({
+          ideaId: z.string(),
+        })
+        .required()
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { ideaId } = input;
+      const idea = await ctx.prisma.idea.deleteMany({
+        where: {
+          id: ideaId,
+          creatorId: ctx.currentUser || ctx.anyanomesUser,
+        },
+      });
+      if (!idea) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Could not delete idea",
+        });
+      }
+
+      return { success: true };
+    }),
+
   addVote: publicProcedure
     .input(
       z

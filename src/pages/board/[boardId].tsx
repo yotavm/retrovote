@@ -36,8 +36,6 @@ const VoteCount = ({
   const yourVotes = votes.filter((vote) => vote.creatorId === creatorId);
   const otherVotes = votes.filter((vote) => vote.creatorId !== creatorId);
 
-  console.log(votes, yourVotes, otherVotes);
-
   return (
     <div className="absolute right-0 bottom-0 z-10 row-auto flex">
       {yourVotes.length > 0 && (
@@ -137,6 +135,16 @@ const Ideas = (Props: IdeasProps) => {
     },
   });
 
+  const { mutate: deleteIdea } = api.idea.delete.useMutation({
+    onSuccess: () => {
+      void ctx.board.getById.invalidate();
+    },
+    onError: (err) => {
+      toast.error("This didn't work.");
+      console.log(err);
+    },
+  });
+
   const handleVoting = (ideaId: string) => {
     if (openForVoting) {
       addVote({ boardId, ideaId });
@@ -203,12 +211,13 @@ const Ideas = (Props: IdeasProps) => {
           </svg>
         </div>
       </div>
-      <div className="text-slate-00 grid w-full cursor-pointer grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 p-4 text-slate-100">
+
+      <div className="text-slate-00 grid w-full cursor-pointer grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-6 p-4 text-slate-100">
         {sortIdeas.map((idea, i) => {
           return (
             <div
               key={i}
-              className="relative h-[230px] rounded-md border-2 border-white  border-opacity-60 bg-[linear-gradient(110.1deg,_rgba(46,_29,_99,_0.4)_0%,_#3D0F34_100%)] p-4"
+              className="group relative h-[230px] rounded-md border-2 border-white  border-opacity-60 bg-[linear-gradient(110.1deg,_rgba(46,_29,_99,_0.4)_0%,_#3D0F34_100%)] p-4"
               onClick={() => handleVoting(idea.id)}
             >
               <p>{idea.content}</p>
@@ -218,6 +227,30 @@ const Ideas = (Props: IdeasProps) => {
                 handleRemoveVote={handleRemoveVote}
                 ideaId={idea.id}
               />
+              <div
+                className={`${
+                  idea.creatorId === currentUserId ? "group-hover:flex" : ""
+                } absolute top-[-9px] right-[-10px] hidden h-7 w-7 items-center justify-center rounded-full border-2 border-white border-opacity-60 bg-slate-900 text-slate-100`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteIdea({ ideaId: idea.id });
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="h-5 w-5"
+                >
+                  <path
+                    stroke-lineap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </div>
             </div>
           );
         })}

@@ -54,7 +54,7 @@ model vote {
 
     ideaId String
 
-    idea idea @relation(fields: [ideaId], references: [id])
+    idea idea @relation(fields: [ideaId], references: [id], onDelete: Cascade)
 
     @@index([ideaId])
 }
