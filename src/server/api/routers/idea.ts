@@ -51,13 +51,44 @@ export const ideaRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { ideaId } = input;
-      const idea = await ctx.prisma.idea.deleteMany({
+      const userId = ctx.currentUser || ctx.anyanomesUser;
+
+      const idea = await ctx.prisma.idea.findUnique({
+        select: {
+          id: true,
+          creatorId: true,
+          board: { select: { creatorId: true } },
+        },
         where: {
           id: ideaId,
-          creatorId: ctx.currentUser || ctx.anyanomesUser,
         },
       });
+
       if (!idea) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "idea not found",
+        });
+      }
+
+      console.log(idea.board.creatorId !== ctx.currentUser);
+      if (
+        idea.creatorId !== userId &&
+        idea.board.creatorId !== ctx.currentUser
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You are not allowed to delete this idea",
+        });
+      }
+
+      const ideaDelted = await ctx.prisma.idea.delete({
+        where: {
+          id: ideaId,
+        },
+      });
+
+      if (!ideaDelted) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Could not delete idea",

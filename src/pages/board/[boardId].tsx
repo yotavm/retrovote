@@ -16,6 +16,7 @@ type Ideas = RouterOutputs["board"]["getById"]["ideas"];
 type Vote = RouterOutputs["board"]["getById"]["ideas"][0]["vote"];
 type IdeasProps = {
   boardId: string;
+  boardCreatorId: string;
   ideas: Ideas;
   openForVoting: boolean;
   voteLimit: number;
@@ -61,7 +62,7 @@ const VoteCount = ({
 };
 
 const Ideas = (Props: IdeasProps) => {
-  const { boardId, ideas, openForVoting, sort } = Props;
+  const { boardId, ideas, openForVoting, sort, boardCreatorId } = Props;
   const ctx = api.useContext();
   const { user } = useUser();
   const currentUserId = user?.id || getAnyanomesId();
@@ -229,7 +230,10 @@ const Ideas = (Props: IdeasProps) => {
               />
               <div
                 className={`${
-                  idea.creatorId === currentUserId ? "group-hover:flex" : ""
+                  idea.creatorId === currentUserId ||
+                  boardCreatorId === currentUserId
+                    ? "group-hover:flex"
+                    : ""
                 } absolute top-[-9px] right-[-10px] hidden h-7 w-7 items-center justify-center rounded-full border-2 border-white border-opacity-60 bg-slate-900 text-slate-100`}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -436,6 +440,7 @@ const Board: NextPage = () => {
           openForVoting={board.openForVoting}
           voteLimit={board.voteLimit}
           sort={sort}
+          boardCreatorId={board.creatorId}
         />
       </main>
     </div>
